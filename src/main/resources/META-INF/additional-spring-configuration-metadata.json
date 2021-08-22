@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "sajari.password",
+      "type": "java.lang.String",
+      "description": "Description for sajari.password."
+    },
+    {
+      "name": "sajari.user",
+      "type": "java.lang.String",
+      "description": "Description for sajari.user."
+    },
+    {
+      "name": "sajari.url",
+      "type": "java.lang.String",
+      "description": "Description for sajari.url."
+    },
+    {
+      "name": "sajari.collection_id",
+      "type": "java.lang.String",
+      "description": "Description for sajari.collection_id."
+    }
+  ] }

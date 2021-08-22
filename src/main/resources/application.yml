@@ -1,0 +1,14 @@
+logging.level:
+  org.springframework.boot.autoconfigure: INFO
+server:
+  port: 3000
+
+spring:
+  jmx:
+    enabled: false
+
+sajari:
+  user: username
+  password: secret-password
+  url: https://api-gateway.sajari.com
+  collection_id: collection_id_value
