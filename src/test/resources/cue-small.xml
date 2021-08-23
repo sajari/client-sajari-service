@@ -1,0 +1,61 @@
+<feed xmlns:g="http://base.google.com/ns/1.0" xmlns="http://www.w3.org/2005/Atom">
+    <title>Cue</title>
+    <link rel="self" href="https://www.cue.com" />
+    <updated>2021-08-22T20:17:26.7403776+10:00</updated>
+    <entry>
+        <g:description><![CDATA[SHOP TO SUPPORT
+Purchase any Cue Face Mask and we will donate $10 to St Vincent&#39;s Hospital in Sydney or Melbourne to help care for our community.
+This face mask is comfortable, washable and reusable. This mask is not medically graded but can assist in preventing the spread of germs.
+Face masks cannot be returned due to hygiene reasons. For further terms regarding returns please visit our
+return policy
+.
+Made in Australia.]]></g:description>
+        <g:google_product_category><![CDATA[Clothing & Accessories]]></g:google_product_category>
+        <g:condition>new</g:condition>
+        <g:shipping_weight>0.4 kg</g:shipping_weight>
+        <g:id>9345792901267</g:id>
+        <g:title>Cue Floral Face Mask</g:title>
+        <g:gender>female</g:gender>
+        <g:link>https://www.cue.cc/au/Shop/Product/Floral-Face-Mask-C00507-W21</g:link>
+        <g:image_link>https://d1hdvmbk3kpdg7.cloudfront.net/Products/C00507_W21/Floral-Face-Mask-C00507-W21_400x800_637480542880372392_C00507-W21-760-2.jpg</g:image_link>
+        <g:product_type><![CDATA[Accessories > Wear to Work > Made in Australia]]></g:product_type>
+        <g:size>0</g:size>
+        <g:color>Cobalt</g:color>
+        <g:availability>Out of Stock</g:availability>
+        <g:price>30 AUD</g:price>
+        <g:sale_price>25.5 AUD</g:sale_price>
+        <g:brand>Cue</g:brand>
+        <g:mpn>9345792901267</g:mpn>
+        <g:item_group_id>C00507</g:item_group_id>
+        <g:gtin>9345792901267</g:gtin>
+        <g:coo>AU</g:coo>
+    </entry>
+    <entry>
+        <g:description><![CDATA[SHOP TO SUPPORT
+Purchase any Cue Face Mask and we will donate $10 to St Vincent&#39;s Hospital in Sydney or Melbourne to help care for our community.
+This face mask is comfortable, washable and reusable. This mask is not medically graded but can assist in preventing the spread of germs.
+Face masks cannot be returned due to hygiene reasons. For further terms regarding returns please visit our
+return policy
+.
+Made in Australia.]]></g:description>
+        <g:google_product_category><![CDATA[Clothing & Accessories]]></g:google_product_category>
+        <g:condition>new</g:condition>
+        <g:shipping_weight>0.4 kg</g:shipping_weight>
+        <g:id>9345792900161</g:id>
+        <g:title>Cue Floral Face Mask</g:title>
+        <g:gender>female</g:gender>
+        <g:link>https://www.cue.cc/au/Shop/Product/Floral-Face-Mask-C00508-W21</g:link>
+        <g:image_link>https://d1hdvmbk3kpdg7.cloudfront.net/Products/C00508_W21/Floral-Face-Mask-C00508-W21_400x800_637480542747617007_C00508-W21-780-2.jpg</g:image_link>
+        <g:product_type><![CDATA[Accessories > Wear to Work > Made in Australia]]></g:product_type>
+        <g:size>0</g:size>
+        <g:color>Ink</g:color>
+        <g:availability>Out of Stock</g:availability>
+        <g:price>30 AUD</g:price>
+        <g:sale_price>25.5 AUD</g:sale_price>
+        <g:brand>Cue</g:brand>
+        <g:mpn>9345792900161</g:mpn>
+        <g:item_group_id>C00508</g:item_group_id>
+        <g:gtin>9345792900161</g:gtin>
+        <g:coo>AU</g:coo>
+    </entry>
+</feed>

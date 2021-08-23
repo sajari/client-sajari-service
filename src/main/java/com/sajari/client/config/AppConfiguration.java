@@ -6,21 +6,26 @@ import com.sajari.client.publisher.SajariClientPublisher;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
+@EnableScheduling
 public class AppConfiguration {
 
-    @Value("${sajari.user}")
+    @Value("${sajari.key-id}")
     private String sajariUser;
 
-    @Value("${sajari.password}")
+    @Value("${sajari.key-secret}")
     private String sajariPassword;
 
-    @Value("${sajari.url}")
+    @Value("${sajari.api-url}")
     private String sajariUrl;
 
-    @Value("${sajari.collection_id}")
+    @Value("${sajari.collection-id}")
     private String sajariCollectionId;
+
+    @Value("${customer.url}")
+    private String customerUrl;
 
     @Bean
     public GoogleFeedDataFetcher googleFeedDataFetcher() {
@@ -29,7 +34,7 @@ public class AppConfiguration {
 
     @Bean
     public SajariClientPublisher sajariClientPublisher() {
-        return new SajariClientPublisher(apiClient(), this);
+        return new SajariClientPublisher(apiClient(), this, googleFeedDataFetcher());
     }
 
     @Bean
@@ -51,5 +56,9 @@ public class AppConfiguration {
 
     public String getSajariCollectionId() {
         return sajariCollectionId;
+    }
+
+    public String getCustomerUrl() {
+        return customerUrl;
     }
 }
