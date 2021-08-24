@@ -16,13 +16,13 @@
       "description": "Sajari collection id for the records"
     },
     {
-      "name": "sajari.key-id",
-      "type": "java.lang.String",
-      "description": "Sajari key id found here: https://app.sajari.com/project/credentials"
-    },
-    {
       "name": "customer.url",
       "type": "java.lang.String",
       "description": "Description for customer.url."
+    },
+    {
+      "name": "sajari.key-id",
+      "type": "java.lang.String",
+      "description": "Sajari key id found here: https://app.sajari.com/project/credentials"
     }
   ] }

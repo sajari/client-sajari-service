@@ -1,10 +1,8 @@
 package com.sajari.client.datafetcher;
 
-import com.google.common.collect.Iterables;
+import com.sajari.client.model.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
 
 import static com.google.common.collect.Iterables.size;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +20,7 @@ class GoogleFeedDataFetcherTest {
 
     @Test
     void fetch() throws Exception {
-        Iterable<Map<String, String>> results = dataFetcher.fetch(getURL("classpath:cue-small.xml"));
+        Iterable<Record> results = dataFetcher.fetch(getURL("classpath:cue-small.xml"));
 
         assertNotNull(results);
         assertEquals(2, size(results));

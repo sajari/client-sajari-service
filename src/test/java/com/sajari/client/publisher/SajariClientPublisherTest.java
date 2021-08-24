@@ -39,7 +39,7 @@ class SajariClientPublisherTest {
     @Test
     void sendToSajari() throws Exception {
 
-        Iterable<Map<String, String>> records = dataFetcher.fetch(getURL("classpath:cue-small.xml"));
+        Iterable<Record> records = dataFetcher.fetch(getURL("classpath:cue-small.xml"));
 
         clientPublisher.sendToSajari(records);
     }

@@ -1,6 +1,7 @@
 package com.sajari.client.publisher;
 
-import com.google.common.collect.Lists;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rometools.rome.io.FeedException;
 import com.sajari.client.ApiClient;
 import com.sajari.client.ApiException;
@@ -11,17 +12,11 @@ import com.sajari.client.datafetcher.DataFetcher;
 import com.sajari.client.model.BatchUpsertRecordsRequest;
 import com.sajari.client.model.BatchUpsertRecordsResponse;
 import com.sajari.client.model.Record;
-import com.sajari.client.model.UpsertRecordRequest;
-import com.sajari.client.model.UpsertRecordResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 @Slf4j
 public class SajariClientPublisher {
@@ -36,7 +31,7 @@ public class SajariClientPublisher {
         this.dataFetcher = dataFetcher;
     }
 
-    public void sendToSajari(Iterable<Map<String, String>> records) {
+    public void sendToSajari(Iterable<Record> records) {
 
         apiClient.setBasePath(appConfiguration.getSajariUrl());
 
@@ -48,7 +43,12 @@ public class SajariClientPublisher {
         RecordsApi apiInstance = new RecordsApi(apiClient);
 
         BatchUpsertRecordsRequest upsertRecordRequest = new BatchUpsertRecordsRequest();
-        upsertRecordRequest.records(newArrayList(records));
+        final ObjectMapper mapper = new ObjectMapper();
+        for (Record record : records) {
+            Map<String, String> recordAsMap = mapper.convertValue(record, new TypeReference<>() {
+            });
+            upsertRecordRequest.addRecordsItem(recordAsMap);
+        }
 
         try {
             BatchUpsertRecordsResponse result = apiInstance.batchUpsertRecords(appConfiguration.getSajariCollectionId(), upsertRecordRequest);
@@ -62,7 +62,7 @@ public class SajariClientPublisher {
     public void updateRecords() throws IOException, FeedException {
 
         // fetch data
-        Iterable<Map<String, String>> fetch = dataFetcher.fetch(appConfiguration.getCustomerUrl());
+        Iterable<Record> fetch = dataFetcher.fetch(appConfiguration.getCustomerUrl());
 
         // update sajari
         sendToSajari(fetch);
