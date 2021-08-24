@@ -13,19 +13,19 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class AppConfiguration {
 
     @Value("${sajari.key-id}")
-    private String sajariUser;
+    private String sajariKeyId;
 
     @Value("${sajari.key-secret}")
-    private String sajariPassword;
+    private String sajariKeySecret;
 
     @Value("${sajari.api-url}")
-    private String sajariUrl;
+    private String sajariApiUrl;
 
     @Value("${sajari.collection-id}")
     private String sajariCollectionId;
 
     @Value("${customer.google-product-feed-url}")
-    private String customerUrl;
+    private String googleProductFeedUrl;
 
     @Bean
     public GoogleFeedDataFetcher googleFeedDataFetcher() {
@@ -42,23 +42,23 @@ public class AppConfiguration {
         return new ApiClient();
     }
 
-    public String getSajariUser() {
-        return sajariUser;
+    public String getSajariKeyId() {
+        return sajariKeyId;
     }
 
-    public String getSajariPassword() {
-        return sajariPassword;
+    public String getSajariKeySecret() {
+        return sajariKeySecret;
     }
 
-    public String getSajariUrl() {
-        return sajariUrl;
+    public String getSajariApiUrl() {
+        return sajariApiUrl;
     }
 
     public String getSajariCollectionId() {
         return sajariCollectionId;
     }
 
-    public String getCustomerUrl() {
-        return customerUrl;
+    public String getGoogleProductFeedUrl() {
+        return googleProductFeedUrl;
     }
 }

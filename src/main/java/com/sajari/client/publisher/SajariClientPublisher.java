@@ -33,12 +33,12 @@ public class SajariClientPublisher {
 
     public void sendToSajari(Iterable<Record> records) {
 
-        apiClient.setBasePath(appConfiguration.getSajariUrl());
+        apiClient.setBasePath(appConfiguration.getSajariApiUrl());
 
         // Configure HTTP basic authorization: BasicAuth
         HttpBasicAuth BasicAuth = (HttpBasicAuth) apiClient.getAuthentication("BasicAuth");
-        BasicAuth.setUsername(appConfiguration.getSajariUser());
-        BasicAuth.setPassword(appConfiguration.getSajariPassword());
+        BasicAuth.setUsername(appConfiguration.getSajariKeyId());
+        BasicAuth.setPassword(appConfiguration.getSajariKeySecret());
 
         RecordsApi apiInstance = new RecordsApi(apiClient);
 
@@ -62,7 +62,7 @@ public class SajariClientPublisher {
     public void updateRecords() throws IOException, FeedException {
 
         // fetch data
-        Iterable<Record> fetch = dataFetcher.fetch(appConfiguration.getCustomerUrl());
+        Iterable<Record> fetch = dataFetcher.fetch(appConfiguration.getGoogleProductFeedUrl());
 
         // update sajari
         sendToSajari(fetch);
