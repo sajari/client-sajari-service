@@ -9,7 +9,7 @@ you can run the Docker file.
 
 You will need to create a _gradle.properties_ with a valid Github personal access token with package access. More information is available here [using a published package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package) and here [creating a personal access token](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token) 
 
-####**_gradle.properties_**
+###### gradle.properties
 ```properties
 gpr.user=githubusername
 gpr.key=ghp_personal_access_token
@@ -39,5 +39,5 @@ These can also be passed as environment variables:
 
 # Deploying the application
 
-######//TODO 
+###### //TODO 
 Docker instructions for Google (Cloud Run) .. perhaps deploying via Github actions and AWS.
