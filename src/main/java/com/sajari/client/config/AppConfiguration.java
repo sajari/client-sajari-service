@@ -24,7 +24,7 @@ public class AppConfiguration {
     @Value("${sajari.collection-id}")
     private String sajariCollectionId;
 
-    @Value("${customer.url}")
+    @Value("${customer.google-product-feed-url}")
     private String customerUrl;
 
     @Bean

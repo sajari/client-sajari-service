@@ -8,7 +8,10 @@ spring:
     enabled: false
 
 sajari:
-  user: username
-  password: secret-password
-  url: https://api-gateway.sajari.com
-  collection_id: collection_id_value
+  key-id: ${key.id}
+  key-secret: ${key.secret}
+  collection-id: ${collection.id}
+  api-url: https://api-gateway.sajari.com
+
+customer:
+  google-product-feed-url: ${google.product.feed.url}

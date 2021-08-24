@@ -28,6 +28,14 @@ customer:
   url: https://www.mywebsite.com/feed/google.xml
 
 ```
+These can also be passed as environment variables:
+
+|Key|Value|
+|----|----|
+|key.id|See [Console credentials page](https://app.sajari.com/project/credentials)|
+|key.secret|See [Console credentials page](https://app.sajari.com/project/credentials)|
+|collection.id|The Sajari collection id you are working with| 
+|google.product.feed.url|Google product feed endpoint|
 
 # Deploying the application
 
