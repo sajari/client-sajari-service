@@ -36,6 +36,10 @@ dependencies {
 	implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 	implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
 
+	implementation 'org.jeasy:easy-batch-core:7.0.2'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.4'
+
+
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
