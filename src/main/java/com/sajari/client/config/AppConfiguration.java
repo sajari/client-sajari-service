@@ -39,7 +39,11 @@ public class AppConfiguration {
 
     @Bean
     public ApiClient apiClient() {
-        return new ApiClient();
+        ApiClient apiClient = new ApiClient();
+        apiClient.setUsername(getSajariKeyId());
+        apiClient.setPassword(getSajariKeySecret());
+        apiClient.setBasePath(getSajariApiUrl());
+        return apiClient;
     }
 
     public String getSajariKeyId() {

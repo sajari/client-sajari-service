@@ -1,22 +1,20 @@
 package com.sajari.client.publisher;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rometools.rome.io.FeedException;
 import com.sajari.client.ApiClient;
-import com.sajari.client.ApiException;
-import com.sajari.client.api.RecordsApi;
-import com.sajari.client.auth.HttpBasicAuth;
 import com.sajari.client.config.AppConfiguration;
 import com.sajari.client.datafetcher.DataFetcher;
-import com.sajari.client.model.BatchUpsertRecordsRequest;
-import com.sajari.client.model.BatchUpsertRecordsResponse;
 import com.sajari.client.model.Record;
 import lombok.extern.slf4j.Slf4j;
+import org.jeasy.batch.core.job.Job;
+import org.jeasy.batch.core.job.JobBuilder;
+import org.jeasy.batch.core.job.JobExecutor;
+import org.jeasy.batch.core.reader.StreamRecordReader;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 public class SajariClientPublisher {
@@ -33,38 +31,20 @@ public class SajariClientPublisher {
 
     public void sendToSajari(Iterable<Record> records) {
 
-        apiClient.setBasePath(appConfiguration.getSajariApiUrl());
+        Job job = new JobBuilder<Record, Map<String, String>>()
+                .reader(new StreamRecordReader<>(StreamSupport.stream(records.spliterator(), false)))
+                .mapper(new JacksonRecordMapper<>(Map.class))
+                .writer(new SajariClientRecordWriter(apiClient, appConfiguration))
+                .batchSize(5)
+                .build();
 
-        // Configure HTTP basic authorization: BasicAuth
-        HttpBasicAuth BasicAuth = (HttpBasicAuth) apiClient.getAuthentication("BasicAuth");
-        BasicAuth.setUsername(appConfiguration.getSajariKeyId());
-        BasicAuth.setPassword(appConfiguration.getSajariKeySecret());
-
-        RecordsApi apiInstance = new RecordsApi(apiClient);
-
-        BatchUpsertRecordsRequest upsertRecordRequest = new BatchUpsertRecordsRequest();
-        final ObjectMapper mapper = new ObjectMapper();
-        for (Record record : records) {
-            Map<String, String> recordAsMap = mapper.convertValue(record, new TypeReference<>() {
-            });
-            upsertRecordRequest.addRecordsItem(recordAsMap);
-        }
-
-        try {
-            BatchUpsertRecordsResponse result = apiInstance.batchUpsertRecords(appConfiguration.getSajariCollectionId(), upsertRecordRequest);
-            log.info(result.toString());
-        } catch (ApiException e) {
-            log.error("Failed to upsert record", e);
-        }
+        JobExecutor jobExecutor = new JobExecutor();
+        jobExecutor.execute(job);
+        jobExecutor.shutdown();
     }
 
     @Scheduled(cron = "@hourly")
-    public void updateRecords() throws IOException, FeedException {
-
-        // fetch data
-        Iterable<Record> fetch = dataFetcher.fetch(appConfiguration.getGoogleProductFeedUrl());
-
-        // update sajari
-        sendToSajari(fetch);
+    public void sendToSajari() throws FeedException, IOException {
+        sendToSajari(dataFetcher.fetch(appConfiguration.getGoogleProductFeedUrl()));
     }
 }
