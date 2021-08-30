@@ -15,18 +15,19 @@ gpr.user=githubusername
 gpr.key=ghp_personal_access_token
 ```
 
-Update the [application.yml](../main/src/main/resources/application.yml) to correctly reference your Sajari collection and with the appropriate collection-id, key-id and key-secret. You will also need to provide a reference to the Google Product Feed.
+Update the [application.yml](../main/src/main/resources/application.yml) to correctly reference your Sajari collection and with the appropriate collection-id, key-id and key-secret. You will also need to provide a reference to the Google Product Feed. These can be passed to the application as environment variables key.id, key.secret, collection.id etc.
 
 ```yaml
+
 sajari:
-  key-id: key-id-from-sajari-app
-  key-secret: key-secret-from-sajari-app
-  collection-id: google-feed-collection
+  key-id: ${key.id}
+  key-secret: ${key.secret}
+  collection-id: ${collection.id}
   api-url: https://api-gateway.sajari.com
 
 customer:
-  url: https://www.mywebsite.com/feed/google.xml
-
+  google-product-feed-url: ${google.product.feed.url}
+  
 ```
 These can also be passed as environment variables:
 
