@@ -23,6 +23,6 @@ class GoogleFeedDataFetcherTest {
         Iterable<Record> results = dataFetcher.fetch(getURL("classpath:cue-small.xml"));
 
         assertNotNull(results);
-        assertEquals(2, size(results));
+        assertEquals(76, size(results));
     }
 }

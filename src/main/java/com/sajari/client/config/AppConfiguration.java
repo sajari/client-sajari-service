@@ -27,6 +27,9 @@ public class AppConfiguration {
     @Value("${customer.google-product-feed-url}")
     private String googleProductFeedUrl;
 
+    @Value("${customer.sweep-stale-data}")
+    private boolean sweepStaleData = true;
+
     @Bean
     public GoogleFeedDataFetcher googleFeedDataFetcher() {
         return new GoogleFeedDataFetcher();
@@ -64,5 +67,9 @@ public class AppConfiguration {
 
     public String getGoogleProductFeedUrl() {
         return googleProductFeedUrl;
+    }
+
+    public boolean isSweepStaleData() {
+        return sweepStaleData;
     }
 }

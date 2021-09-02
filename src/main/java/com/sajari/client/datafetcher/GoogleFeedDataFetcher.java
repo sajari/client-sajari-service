@@ -15,6 +15,9 @@ import org.jdom2.Element;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,6 +35,11 @@ public class GoogleFeedDataFetcher implements DataFetcher {
         try (InputStream inputStream = url.openStream()) {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(inputStream));
 
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.of("UTC"));
+            Instant now = Instant.now();
+            String rfc3339Now = formatter.format(now);
+
             for (SyndEntry entry : feed.getEntries()) {
 
                 Map<String, String> recordMap = Maps.newHashMap();
@@ -41,6 +49,7 @@ public class GoogleFeedDataFetcher implements DataFetcher {
                 }
 
                 Record record = mapper.convertValue(recordMap, Record.class);
+                record.setRecord_creation_date(rfc3339Now);
                 records.add(record);
             }
         }
