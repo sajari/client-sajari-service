@@ -3,6 +3,7 @@ package com.sajari.client.config;
 import com.sajari.client.ApiClient;
 import com.sajari.client.datafetcher.GoogleFeedDataFetcher;
 import com.sajari.client.publisher.SajariClientPublisher;
+import com.sajari.client.setup.CreateSchema;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,11 @@ public class AppConfiguration {
     @Bean
     public SajariClientPublisher sajariClientPublisher() {
         return new SajariClientPublisher(apiClient(), this, googleFeedDataFetcher());
+    }
+
+    @Bean
+    public CreateSchema createSchema() {
+        return new CreateSchema(apiClient(), this);
     }
 
     @Bean

@@ -6,6 +6,7 @@ import com.sajari.client.ApiException;
 import com.sajari.client.api.RecordsApi;
 import com.sajari.client.config.AppConfiguration;
 import com.sajari.client.model.BatchUpsertRecordsRequest;
+import com.sajari.client.model.BatchUpsertRecordsRequestPipeline;
 import com.sajari.client.model.BatchUpsertRecordsResponse;
 import com.sajari.client.model.BatchUpsertRecordsResponseKey;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.jeasy.batch.core.writer.RecordWriter;
 
 import java.util.Map;
 import java.util.Set;
+
+import static com.sajari.client.setup.CreateSchema.APP_RECORD_PIPELINE_NAME;
 
 @Slf4j
 public final class SajariClientRecordWriter implements RecordWriter<Map<String, String>> {
@@ -38,7 +41,7 @@ public final class SajariClientRecordWriter implements RecordWriter<Map<String, 
 
         try {
 
-            BatchUpsertRecordsRequest upsertRecordRequest = new BatchUpsertRecordsRequest();
+            BatchUpsertRecordsRequest upsertRecordRequest = new BatchUpsertRecordsRequest().pipeline(new BatchUpsertRecordsRequestPipeline().name(APP_RECORD_PIPELINE_NAME));
 
             for (org.jeasy.batch.core.record.Record<Map<String, String>> pRecord : batch) {
                 upsertRecordRequest.addRecordsItem(pRecord.getPayload());
@@ -52,7 +55,7 @@ public final class SajariClientRecordWriter implements RecordWriter<Map<String, 
             log.info("Stored {} records", writtenRecordIds.size());
 
         } catch (ApiException e) {
-            log.error("Failed to upsert record", e);
+            log.error("Failed to upsert record. Response code: {}, Response body: {}", e.getCode(), e.getResponseBody());
         }
     }
 

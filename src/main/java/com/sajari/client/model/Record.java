@@ -2,8 +2,6 @@ package com.sajari.client.model;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class Record {
 

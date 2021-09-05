@@ -15,6 +15,7 @@ import com.sajari.client.model.QueryCollectionResponse;
 import com.sajari.client.model.QueryResult;
 import com.sajari.client.model.Record;
 import com.sajari.client.model.RecordKey;
+import com.sajari.client.setup.CreateSchema;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jeasy.batch.core.job.Job;
@@ -36,8 +37,6 @@ import static com.google.common.collect.Sets.newHashSet;
 @Slf4j
 public class SajariClientPublisher {
 
-    private static final String PIPELINE_NAME = "app";
-    private static final String PIPELINE_VERSION = "1";
     private static final int RESULTS_PER_PAGE_SIZE = 100;
     private final ApiClient apiClient;
     private final AppConfiguration appConfiguration;
@@ -99,7 +98,7 @@ public class SajariClientPublisher {
             }
 
         } catch (ApiException e) {
-            log.error("Failed to query results: " + e.getMessage(), e);
+            log.error("Failed to query results: " + e.getResponseBody(), e);
         }
         return recordIndexes;
     }
@@ -149,14 +148,7 @@ public class SajariClientPublisher {
     @NotNull
     private QueryCollectionRequest getQueryCollectionRequest() {
 
-        QueryCollectionRequestPipeline queryCollectionRequestPipeline = new QueryCollectionRequestPipeline();
-        queryCollectionRequestPipeline.setName(PIPELINE_NAME);
-        queryCollectionRequestPipeline.setVersion(PIPELINE_VERSION);
-
-        QueryCollectionRequest queryCollectionRequest = new QueryCollectionRequest();
-        queryCollectionRequest.setPipeline(queryCollectionRequestPipeline);
-        queryCollectionRequest.setVariables(buildBaseVariablesMap());
-        return queryCollectionRequest;
+        return new QueryCollectionRequest().pipeline(new QueryCollectionRequestPipeline().name(CreateSchema.APP_QUERY_PIPELINE_NAME)).variables(buildBaseVariablesMap());
     }
 
     @NotNull
