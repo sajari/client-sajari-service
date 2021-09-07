@@ -38,7 +38,7 @@ import static com.google.common.collect.Sets.newHashSet;
 public class SajariClientPublisher {
 
     private static final int RESULTS_PER_PAGE_SIZE = 100;
-    private static final String UNIQUE_RECORD_ID = "_id";
+    protected static final String UNIQUE_RECORD_ID = "id";
     private final ApiClient apiClient;
     private final AppConfiguration appConfiguration;
     private final DataFetcher dataFetcher;
@@ -97,7 +97,8 @@ public class SajariClientPublisher {
                 // Increment the page to the next page of results
                 currentPage++;
 
-                queryResults = new CollectionsApi(apiClient).queryCollection(appConfiguration.getSajariCollectionId(), getQueryCollectionRequest(Map.of("page", Integer.toString(currentPage)))).getResults();
+                queryCollectionRequest = getQueryCollectionRequest(Map.of("page", Integer.toString(currentPage)));
+                queryResults = new CollectionsApi(apiClient).queryCollection(appConfiguration.getSajariCollectionId(), queryCollectionRequest).getResults();
             }
 
         } catch (ApiException e) {
@@ -159,7 +160,7 @@ public class SajariClientPublisher {
         return Map.of(
                 "q", "",
                 "filter", "_id != ''",
-                "fields", UNIQUE_RECORD_ID + ",id,record_creation_date,title",
+                "fields", UNIQUE_RECORD_ID + ",record_creation_date,title",
                 "page", "1",
                 "resultsPerPage", Integer.toString(RESULTS_PER_PAGE_SIZE)
         );
@@ -168,8 +169,8 @@ public class SajariClientPublisher {
     @NotNull
     private Map<String, String> buildVariablesMap(Map<String, String> additionalVariables) {
 
-        HashMap<String, String> variablesMap = new HashMap<>(additionalVariables);
-        variablesMap.putAll(buildBaseVariablesMap());
+        HashMap<String, String> variablesMap = new HashMap<>(buildBaseVariablesMap());
+        variablesMap.putAll(additionalVariables);
 
         return variablesMap;
     }
