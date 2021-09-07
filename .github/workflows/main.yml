@@ -1,0 +1,42 @@
+name: Deploy to GCP
+
+on:
+ release:
+   types: [ published ]
+
+jobs:
+  build:
+    name: Cloud Run Deployment
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup GCP Service Account
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 'latest'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+
+      - name: Build and Push Container
+        run: |-
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_PROJECT_ID }}:${{  github.sha }} .
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_PROJECT_ID }}:${{  github.sha }}
+
+      - name: Deploy
+        run: |- 
+          gcloud run deploy ${{ secrets.GCP_PROJECT_ID }} \
+          --region australia-southeast1 \
+          --port=3000 \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_PROJECT_ID }} \
+          --platform managed \
+          --set-env-vars "key.id=${{ secrets.SAJARI_KEY_ID }},key.secret=${{ secrets.SAJARI_SECRET }},collection.id=${{ secrets.COLLECTION_ID }},google.product.feed.url=${ secrets.GOOGLE_PRODUCT_FEED_URL }" \
+          --allow-unauthenticated \
+          --project ${{ secrets.GCP_PROJECT_ID }}
