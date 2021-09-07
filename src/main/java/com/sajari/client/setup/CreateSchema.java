@@ -7,6 +7,7 @@ import com.sajari.client.api.PipelinesApi;
 import com.sajari.client.api.SchemaApi;
 import com.sajari.client.config.AppConfiguration;
 import com.sajari.client.model.BatchCreateSchemaFieldsRequest;
+import com.sajari.client.model.BatchCreateSchemaFieldsResponse;
 import com.sajari.client.model.Collection;
 import com.sajari.client.model.Pipeline;
 import com.sajari.client.model.PipelineStep;
@@ -63,7 +64,7 @@ public class CreateSchema {
                 SchemaApi schemaApi = new SchemaApi(apiClient);
                 BatchCreateSchemaFieldsRequest batchCreateSchemaFieldsRequest = new BatchCreateSchemaFieldsRequest()
                         .addFieldsItem(
-                                new SchemaField().name("id").type(INTEGER).mode(REQUIRED)
+                                new SchemaField().name("id").type(INTEGER).mode(UNIQUE)
                         ).addFieldsItem(
                                 new SchemaField().name("title").type(STRING).mode(REQUIRED)
                         ).addFieldsItem(
@@ -79,7 +80,7 @@ public class CreateSchema {
                         ).addFieldsItem(
                                 new SchemaField().name("price").type(STRING).mode(NULLABLE)
                         ).addFieldsItem(
-                                new SchemaField().name("gtin").type(INTEGER).mode(UNIQUE)
+                                new SchemaField().name("gtin").type(INTEGER).mode(REQUIRED)
                         ).addFieldsItem(
                                 new SchemaField().name("brand").type(STRING).mode(NULLABLE)
                         ).addFieldsItem(
@@ -115,7 +116,8 @@ public class CreateSchema {
                         );
 
                 try {
-                    schemaApi.batchCreateSchemaFields(appConfiguration.getSajariCollectionId(), batchCreateSchemaFieldsRequest);
+                    BatchCreateSchemaFieldsResponse batchCreateSchemaFieldsResponse = schemaApi.batchCreateSchemaFields(appConfiguration.getSajariCollectionId(), batchCreateSchemaFieldsRequest);
+                    log.info("Schema created: {}", batchCreateSchemaFieldsResponse.getFields());
                 } catch (ApiException ex) {
                     log.error("Failed to create schema. Response code: {}, Response message: {}", ex.getCode(), ex.getResponseBody());
                 }

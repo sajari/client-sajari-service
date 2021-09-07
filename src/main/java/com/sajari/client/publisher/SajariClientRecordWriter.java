@@ -1,5 +1,6 @@
 package com.sajari.client.publisher;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.sajari.client.ApiClient;
 import com.sajari.client.ApiException;
@@ -28,7 +29,7 @@ public final class SajariClientRecordWriter implements RecordWriter<Map<String, 
     public SajariClientRecordWriter(ApiClient apiClient, AppConfiguration appConfiguration) {
         this.appConfiguration = appConfiguration;
         this.apiInstance = new RecordsApi(apiClient);
-        writtenRecordIds = Sets.newHashSet();
+        this.writtenRecordIds = Sets.newHashSet();
     }
 
     @Override
@@ -57,6 +58,8 @@ public final class SajariClientRecordWriter implements RecordWriter<Map<String, 
         } catch (ApiException e) {
             log.error("Failed to upsert record. Response code: {}, Response body: {}", e.getCode(), e.getResponseBody());
         }
+
+        log.info("Records stored: {}" , Iterables.toString(writtenRecordIds));
     }
 
     @Override

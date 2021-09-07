@@ -38,6 +38,7 @@ import static com.google.common.collect.Sets.newHashSet;
 public class SajariClientPublisher {
 
     private static final int RESULTS_PER_PAGE_SIZE = 100;
+    private static final String UNIQUE_RECORD_ID = "_id";
     private final ApiClient apiClient;
     private final AppConfiguration appConfiguration;
     private final DataFetcher dataFetcher;
@@ -60,7 +61,6 @@ public class SajariClientPublisher {
 
         // Update records
         Iterable<Record> records = dataFetcher.fetch(appConfiguration.getGoogleProductFeedUrl());
-//        Iterable<Record> records = dataFetcher.fetch(getURL("classpath:cue-small-smaller.xml"));
 
         Set<String> sentRecordIds = sendToSajari(records);
 
@@ -72,14 +72,17 @@ public class SajariClientPublisher {
         }
     }
 
-    private Set<String> determineCurrentRecords() {
+    protected Set<String> determineCurrentRecords() {
         Set<String> recordIndexes = newHashSet();
 
         try {
-            QueryCollectionResponse queryCollectionResponse = new CollectionsApi(apiClient).queryCollection(appConfiguration.getSajariCollectionId(), getQueryCollectionRequest());
+            QueryCollectionRequest queryCollectionRequest = getQueryCollectionRequest();
+            QueryCollectionResponse queryCollectionResponse = new CollectionsApi(apiClient).queryCollection(appConfiguration.getSajariCollectionId(), queryCollectionRequest);
 
             double totalSize = NumberUtils.toDouble(queryCollectionResponse.getTotalSize());
             int numOfPages = (int) Math.ceil(totalSize / RESULTS_PER_PAGE_SIZE);
+
+            log.info("Current record count {} across {} number of pages", totalSize, numOfPages);
 
             List<QueryResult> queryResults = queryCollectionResponse.getResults();
 
@@ -88,7 +91,7 @@ public class SajariClientPublisher {
 
                 for (QueryResult queryResult : queryResults) {
                     Map<String, String> queryResultRecord = (Map<String, String>) queryResult.getRecord();
-                    recordIndexes.add(queryResultRecord.get("id"));
+                    recordIndexes.add(queryResultRecord.get(UNIQUE_RECORD_ID));
                 }
 
                 // Increment the page to the next page of results
@@ -98,7 +101,7 @@ public class SajariClientPublisher {
             }
 
         } catch (ApiException e) {
-            log.error("Failed to query results: " + e.getResponseBody(), e);
+            log.error("Failed to query results wth query {} due to response code {}, response body {}", getQueryCollectionRequest(), e.getCode(), e.getResponseBody());
         }
         return recordIndexes;
     }
@@ -123,16 +126,15 @@ public class SajariClientPublisher {
     private void deleteOldRecords(Set<String> recordIndexes) {
 
         for (String recordIndex : recordIndexes) {
-            DeleteRecordRequest deleteRecordRequest = new DeleteRecordRequest();
-            RecordKey recordKey = new RecordKey();
-            recordKey.setField("id");
-            recordKey.setValue(recordIndex);
-            deleteRecordRequest.setKey(recordKey);
+
+            RecordKey recordKey = new RecordKey().field(UNIQUE_RECORD_ID).value(recordIndex);
+            DeleteRecordRequest deleteRecordRequest = new DeleteRecordRequest().key(recordKey);
 
             try {
                 new RecordsApi(apiClient).deleteRecord(appConfiguration.getSajariCollectionId(), deleteRecordRequest);
+                log.info("Deleting record: {},{}", recordKey.getField(), recordKey.getValue());
             } catch (ApiException e) {
-                log.error(e.getMessage(), e);
+                log.error("Failed to delete record {} due to response code {}, response body {}", recordKey, e.getCode(), e.getResponseBody());
             }
         }
     }
@@ -154,20 +156,21 @@ public class SajariClientPublisher {
     @NotNull
     private Map<String, String> buildBaseVariablesMap() {
 
-        Map<String, String> elements = new HashMap<>();
-        elements.put("q", "");
-//        elements.put("filter", "SINCE_NOW(record_creation_date, '" + appConfiguration.getSweepInterval() + "')");
-        elements.put("fields", "_id,record_creation_date,title");
-        elements.put("page", "1");
-        elements.put("resultsPerPage", Integer.toString(RESULTS_PER_PAGE_SIZE));
-        return elements;
+        return Map.of(
+                "q", "",
+                "filter", "_id != ''",
+                "fields", UNIQUE_RECORD_ID + ",id,record_creation_date,title",
+                "page", "1",
+                "resultsPerPage", Integer.toString(RESULTS_PER_PAGE_SIZE)
+        );
     }
 
     @NotNull
     private Map<String, String> buildVariablesMap(Map<String, String> additionalVariables) {
 
-        Map<String, String> elements = buildBaseVariablesMap();
-        elements.putAll(additionalVariables);
-        return elements;
+        HashMap<String, String> variablesMap = new HashMap<>(additionalVariables);
+        variablesMap.putAll(buildBaseVariablesMap());
+
+        return variablesMap;
     }
 }
