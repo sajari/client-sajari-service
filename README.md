@@ -1,6 +1,7 @@
 # Client Sajari service
 
-This repository contains a Dockerised process that with minimal configuration will allow you to integrate with the Sajari search service.
+This repository contains a Dockerised application that with minimal configuration will allow you to integrate the Sajari search service
+with a [Google product feed](https://support.google.com/merchants/answer/7052112?hl=en). 
 
 # Building the application
 
@@ -27,6 +28,7 @@ sajari:
 
 customer:
   google-product-feed-url: ${google.product.feed.url}
+  sweep-stale-data: ${sweep.stale.data}
   
 ```
 These can also be passed as environment variables:
@@ -37,6 +39,7 @@ These can also be passed as environment variables:
 |key.secret|See [Console credentials page](https://app.sajari.com/project/credentials)|
 |collection.id|The Sajari collection id you are working with| 
 |google.product.feed.url|Google product feed endpoint|
+|sweep.stale.data|'true' if the service should delete old recrods|
 
 # Deploying the application
 

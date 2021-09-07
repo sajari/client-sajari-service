@@ -24,5 +24,10 @@
       "name": "customer.google-product-feed-url",
       "type": "java.lang.String",
       "description": "The Google product feed url"
+    },
+    {
+      "name": "customer.sweep-stale-data",
+      "type": "java.lang.String",
+      "description": "Whether to enable sweeping of customer data"
     }
   ] }

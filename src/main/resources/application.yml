@@ -1,5 +1,7 @@
-logging.level:
-  org.springframework.boot.autoconfigure: INFO
+logging:
+  level:
+    org.springframework.boot.autoconfigure: INFO
+    okhttp3: ERROR
 server:
   port: 3000
 
@@ -15,3 +17,4 @@ sajari:
 
 customer:
   google-product-feed-url: ${google.product.feed.url}
+  sweep-stale-data: ${sweep.stale.data}

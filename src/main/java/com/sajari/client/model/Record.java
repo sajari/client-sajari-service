@@ -28,4 +28,5 @@ public class Record {
     private String additional_image_link;
     private String shipping_weight;
     private String coo;
+    private String record_creation_date;
 }
