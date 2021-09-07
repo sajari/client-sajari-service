@@ -43,5 +43,6 @@ These can also be passed as environment variables:
 
 # Deploying the application
 
-###### //TODO 
-Docker instructions for Google (Cloud Run) .. perhaps deploying via Github actions and AWS.
+This application can be deployed as a Docker container to a service of your choice. 
+
+Attached to this project is an example deployment configuration using a GitHub action triggered when you create a [GitHub release](https://docs.github.com/en/github/administering-a-repository/releasing-projects-on-github/managing-releases-in-a-repository). Look at the following action for more details: [main.yml](../main/.github/workflows/main.yml)
